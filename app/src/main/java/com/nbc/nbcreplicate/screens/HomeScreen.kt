@@ -19,15 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImagePainter
-import coil.compose.ImagePainter
-import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
 import coil.size.Scale
 import com.nbc.nbcreplicate.models.Item
 import com.nbc.nbcreplicate.viewmodels.AppViewModel
@@ -79,22 +72,24 @@ fun HomePageScreen(appViewModel: AppViewModel) {
 
 
 @Composable
-fun ShelfItem(item: Item, isContinueWatching: Boolean) {
+fun ShelfItem(item: Item?, isContinueWatching: Boolean) {
+
+    if (item == null) {
+        return
+    }
 
     val imageHeight = if (isContinueWatching) 180.dp else 280.dp
     val imageWidth = if (isContinueWatching) 250.dp else 180.dp
 
-    Column(
-        modifier = Modifier
-            .padding(6.dp)
-
-    ) {
+    Column(modifier = Modifier
+        .padding(6.dp)
+        .width(imageWidth)) {
         val painter = rememberImagePainter(
             data = item.image,
             builder = {
                 crossfade(true)
                 scale(Scale.FILL)
-                error(R.drawable.no_image)
+                error(R.drawable.no_image) // Fallback image in case of error
             }
         )
 
@@ -106,17 +101,29 @@ fun ShelfItem(item: Item, isContinueWatching: Boolean) {
             Image(
                 painter = painter,
                 contentDescription = item.title,
-                contentScale =  ContentScale.Crop,
+                contentScale = ContentScale.Crop,
             )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = item.title, maxLines = 1, style = MaterialTheme.typography.bodyMedium.copy(color = Color.White))
+        Text(
+            text = item.title,
+            maxLines = 1,
+            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+        )
         item.subtitle?.let {
-            Text(text = it, maxLines = 1, style = MaterialTheme.typography.bodyMedium.copy(color = Color.White))
+            Text(
+                text = it,
+                maxLines = 1,
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+            )
         }
         item.labelBadge?.let {
-            Text(text = it, maxLines = 1, style = MaterialTheme.typography.bodyMedium.copy(color = Color.White))
+            Text(
+                text = it,
+                maxLines = 1,
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+            )
         }
     }
 }

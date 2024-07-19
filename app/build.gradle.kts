@@ -52,6 +52,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.junit.ktx)
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+    testImplementation (libs.androidx.core.testing)
+    androidTestImplementation (libs.androidx.rules)
     testImplementation (libs.kotlinx.coroutines.test)
     testImplementation (libs.mockito.core)
     testImplementation (libs.mockito.inline)
@@ -72,11 +79,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
