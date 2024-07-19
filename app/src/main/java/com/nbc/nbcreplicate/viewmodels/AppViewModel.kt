@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nbc.nbcreplicate.models.HomePage
 import com.nbc.nbcreplicate.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,6 +24,7 @@ class AppViewModel @Inject constructor(
     fun getData(){
         viewModelScope.launch {
             _dataStateFlow.value = UiStates.LOADING
+            delay(1500)
             try {
                 appRepository.getHomePageData().collectLatest {
                     _dataStateFlow.value = UiStates.SUCCESS(it)

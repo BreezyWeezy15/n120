@@ -20,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.size.Scale
+import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import com.nbc.nbcreplicate.models.Item
 import com.nbc.nbcreplicate.models.Shelf
@@ -36,8 +38,8 @@ fun HomePageScreen(appViewModel: AppViewModel) {
     when (val state = uiState) {
         is AppViewModel.UiStates.SUCCESS -> {
             LazyColumn(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)) {
+                .fillMaxSize()
+                .padding(16.dp)) {
                 items(state.homePage.shelves) { shelf ->
                     Shelf(shelf = shelf)
                 }
@@ -45,7 +47,7 @@ fun HomePageScreen(appViewModel: AppViewModel) {
         }
         is AppViewModel.UiStates.LOADING -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color.White)
             }
         }
         is AppViewModel.UiStates.ERROR -> {
@@ -70,7 +72,7 @@ fun Shelf(shelf: Shelf) {
                 .padding(bottom = 8.dp)
                 .horizontalScroll(rememberScrollState())
         ) {
-            val isContinueWatching = shelf.title == "Trending Now" || shelf.title == "Latest Episodes"
+            val isContinueWatching = shelf.title == "Trending Now"
             shelf.items.forEach { item ->
                 ShelfItem(item = item, isContinueWatching = isContinueWatching)
             }
@@ -86,28 +88,30 @@ fun ShelfItem(item: Item?, isContinueWatching: Boolean) {
         return
     }
 
-    val imageHeight = if (isContinueWatching) 220.dp else 280.dp
-    val imageWidth = if (isContinueWatching) 280.dp else 200.dp
+
+    val imageHeight = if (!isContinueWatching) 220.dp else 280.dp
+    val imageWidth = if (!isContinueWatching) 280.dp else 200.dp
+
+    Column(modifier = Modifier.padding(6.dp)) {
 
 
-    Column(modifier = Modifier
-        .padding(6.dp)
-        .width(imageWidth)) {
+        Box(modifier = Modifier
+            .width(imageWidth)
+            .height(imageHeight)) {
 
+            val painter = rememberGlidePainter(
+                request = item.image,
+            )
 
-        Box(
-            modifier = Modifier
-                .height(imageHeight)
-                .width(imageWidth)
-        ) {
             Image(
-                painter = rememberGlidePainter(request = item.image),
-                contentDescription = "",
-                contentScale = ContentScale.FillBounds
+                painter = painter,
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds, // Adjust content scale as needed
             )
         }
 
         Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = item.title,
             maxLines = 1,
@@ -130,51 +134,3 @@ fun ShelfItem(item: Item?, isContinueWatching: Boolean) {
     }
 
 }
-
-/*
-Column(modifier = Modifier
-        .padding(6.dp)
-        .width(imageWidth)) {
-        val painter = rememberImagePainter(
-            data = item.image,
-            builder = {
-                crossfade(true)
-                scale(Scale.FILL)
-                error(R.drawable.no_image) // Fallback image in case of error
-            }
-        )
-
-        Box(
-            modifier = Modifier
-                .height(imageHeight)
-                .width(imageWidth)
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = item.title,
-                contentScale = ContentScale.Crop,
-            )
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = item.title,
-            maxLines = 1,
-            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-        )
-        item.subtitle?.let {
-            Text(
-                text = it,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-            )
-        }
-        item.labelBadge?.let {
-            Text(
-                text = it,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
-            )
-        }
-    }
- */
