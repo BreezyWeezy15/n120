@@ -69,7 +69,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+   ///
 
+    implementation("com.google.accompanist:accompanist-glide:0.15.0")
 
     /////
     testImplementation (libs.kotlinx.coroutines.test)
