@@ -52,25 +52,14 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.junit.ktx)
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test:runner:1.5.2")
-    androidTestImplementation ("androidx.test:rules:1.5.0")
+
     implementation (libs.androidx.lifecycle.livedata.ktx)
-    testImplementation (libs.androidx.core.testing)
-    androidTestImplementation (libs.androidx.rules)
-    testImplementation (libs.kotlinx.coroutines.test)
-    testImplementation (libs.mockito.core)
-    testImplementation (libs.mockito.inline)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.coil.compose)
     implementation (libs.gson)
     implementation (libs.dagger.hilt.android)
+    implementation(libs.androidx.junit.ktx)
     kapt (libs.dagger.hilt.compiler)
-    androidTestImplementation  (libs.hilt.android.testing)
-    kaptAndroidTest (libs.google.hilt.compiler)
-    testImplementation (libs.google.hilt.android.testing)
-    kaptTest (libs.com.google.dagger.hilt.compiler2)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -79,9 +68,27 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    androidTestImplementation(libs.androidx.junit)
+
+
+
+    /////
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.inline)
+    testImplementation (libs.mockito.android)
+    testImplementation (libs.google.hilt.android.testing)
+    kaptAndroidTest (libs.google.hilt.compiler)
+    kaptTest (libs.com.google.dagger.hilt.compiler2)
+    androidTestImplementation  (libs.hilt.android.testing)
+    testImplementation (libs.androidx.core.testing)
+    androidTestImplementation (libs.androidx.rules)
+    androidTestImplementation (libs.androidx.runner)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit)
+    testImplementation (libs.mockwebserver)
+
 }

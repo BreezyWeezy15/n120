@@ -1,5 +1,3 @@
-package com.nbc.nbcreplicate
-
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
@@ -8,10 +6,15 @@ import com.google.gson.reflect.TypeToken
 import com.nbc.nbcreplicate.models.HomePage
 import com.nbc.nbcreplicate.repository.AppRepository
 import com.nbc.nbcreplicate.viewmodels.AppViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -22,6 +25,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
 class AppViewModelTest {
 
@@ -36,15 +40,25 @@ class AppViewModelTest {
     @Mock
     private lateinit var observer: Observer<AppViewModel.UiStates>
 
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
+
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         viewModel = AppViewModel(repository)
+        Dispatchers.setMain(testDispatcher)
         viewModel.dataState.asLiveData().observeForever(observer)
     }
 
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain() // Reset the main dispatcher
+        testDispatcher.cleanupTestCoroutines() // Clean up the test dispatcher
+    }
+
     @Test
-    fun testGetDataSuccess() = runTest {
+    fun testGetDataSuccess() = testScope.runTest {
         // Updated JSON data
         val json = """{
             "page": "HOMEPAGE",
@@ -97,7 +111,7 @@ class AppViewModelTest {
     }
 
     @Test
-    fun testGetDataError() = runTest {
+    fun testGetDataError() = testScope.runTest {
         val errorMessage = "Error occurred"
         Mockito.`when`(repository.getHomePageData()).thenThrow(RuntimeException(errorMessage))
 
