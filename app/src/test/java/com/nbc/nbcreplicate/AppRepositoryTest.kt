@@ -31,7 +31,7 @@ class AppRepositoryTest {
 
     /// Test and make sure data match
     @Test
-    fun testGetHomePageData() = runBlocking {
+    fun testGetHomePageDataSuccess() = runBlocking {
         // Updated JSON data based on the provided structure
         val json = """{
             "page": "HOMEPAGE",
@@ -77,7 +77,7 @@ class AppRepositoryTest {
 
     // Test to fail providing json with different data
     @Test
-    fun testGetHomePageData2() = runBlocking {
+    fun testGetHomePageDataFail() = runBlocking {
 
         val json = """{
         "page": "HOMEPAGE",
